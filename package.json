@@ -26,8 +26,17 @@
       "mail": {
         "impl": "srv/mail-service.js"
       },
+      "[hybrid]": {
+        "db": "hana",
+        "auth": "xsuaa"
+      },
       "[development]": {
-        "db": "sqlite",
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        },
         "auth": {
           "kind": "mocked",
           "users": {

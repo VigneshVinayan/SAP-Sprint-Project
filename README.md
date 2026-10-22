@@ -128,6 +128,9 @@ mta.yaml                 Cloud Foundry deployment
 test/itam.test.js        40 automated tests (npm test)
 ```
 
+> **Step-by-step guide:** [docs/BAS_RUN_AND_DEPLOY.md](docs/BAS_RUN_AND_DEPLOY.md) covers prerequisites and entitlements,
+> SAP Business Application Studio (local and hybrid), Cloud Foundry deployment, role assignment and troubleshooting.
+
 ## Run locally (no BTP needed)
 
 ```bash
