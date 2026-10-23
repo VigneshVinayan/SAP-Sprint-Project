@@ -17,6 +17,8 @@ sap.ui.define(
             onInit: function () {
                 this.getView().setModel(new JSONModel({}), "kpi");
                 this.getView().setModel(new JSONModel({ busy: false, filters: emptyFilters(), rows: [] }), "view");
+                this._dashboardLoading = false;
+                this._dashboardRequestId = 0;
                 this.loadDashboard();
             },
 
@@ -27,8 +29,11 @@ sap.ui.define(
             // KPIs come from the function AssetManagerService.getDashboard(...) with the same filters
             // that the reports use (FR-026)
             loadDashboard: function () {
+                if (this._dashboardLoading) return;
+                this._dashboardLoading = true;
+                const requestId = ++this._dashboardRequestId;
                 const view = this.getView().getModel("view");
-                const filters = view.getProperty("/filters");
+                const filters = { ...view.getProperty("/filters") };
                 const binding = this.getOwnerComponent().getModel().bindContext("/getDashboard(...)");
 
                 Object.keys(filters).forEach((name) => {
@@ -38,12 +43,17 @@ sap.ui.define(
                 view.setProperty("/busy", true);
                 binding.execute()
                     .then(() => {
+                        if (requestId !== this._dashboardRequestId) return;
                         const data = binding.getBoundContext().getObject();
                         this.getView().getModel("kpi").setData(data);
                         view.setProperty("/rows", this.tableRows(data));
                     })
                     .catch((error) => MessageBox.error(this.i18n("loadError", [error.message])))
-                    .finally(() => view.setProperty("/busy", false));
+                    .finally(() => {
+                        binding.destroy();
+                        this._dashboardLoading = false;
+                        view.setProperty("/busy", false);
+                    });
             },
 
             // text / table equivalent of all chart values (NFR-011)
