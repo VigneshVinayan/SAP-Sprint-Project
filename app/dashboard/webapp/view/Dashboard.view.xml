@@ -10,7 +10,7 @@
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
     displayBlock="true">
 
-    <f:DynamicPage id="page" headerExpanded="true" toggleHeaderOnTitleClick="true" busy="{view>/busy}">
+    <f:DynamicPage id="page" headerExpanded="true" toggleHeaderOnTitleClick="true">
 
         <!-- ================= Title ================= -->
         <f:title>
